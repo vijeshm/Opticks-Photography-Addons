@@ -1,5 +1,5 @@
 /****************************************************************************
-** Meta object code from reading C++ file 'median_filter_ui.h'
+** Meta object code from reading C++ file 'conservative_filter_ui.h'
 **
 ** Created: Sun 15. Apr 01:47:12 2012
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
@@ -7,9 +7,9 @@
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../New Plugins/median_filter_ui.h"
+#include "../New Plugins/conservative_filter_ui.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'median_filter_ui.h' doesn't include <QObject>."
+#error "The header file 'conservative_filter_ui.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 62
 #error "This file was generated using the moc from 4.7.4. It"
 #error "cannot be used with the include files from this version of Qt."
@@ -17,7 +17,7 @@
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
-static const uint qt_meta_data_median_filter_ui[] = {
+static const uint qt_meta_data_conservative_filter_ui[] = {
 
  // content:
        5,       // revision
@@ -37,34 +37,34 @@ static const uint qt_meta_data_median_filter_ui[] = {
        0        // eod
 };
 
-static const char qt_meta_stringdata_median_filter_ui[] = {
-    "median_filter_ui\0\0t\0setRadiusValue(double)\0"
+static const char qt_meta_stringdata_conservative_filter_ui[] = {
+    "conservative_filter_ui\0\0t\0setRadiusValue(double)\0"
     "setRadiusValue()\0"
 };
 
-const QMetaObject median_filter_ui::staticMetaObject = {
-    { &QDialog::staticMetaObject, qt_meta_stringdata_median_filter_ui,
-      qt_meta_data_median_filter_ui, 0 }
+const QMetaObject conservative_filter_ui::staticMetaObject = {
+    { &QDialog::staticMetaObject, qt_meta_stringdata_conservative_filter_ui,
+      qt_meta_data_conservative_filter_ui, 0 }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
-const QMetaObject &median_filter_ui::getStaticMetaObject() { return staticMetaObject; }
+const QMetaObject &conservative_filter_ui::getStaticMetaObject() { return staticMetaObject; }
 #endif //Q_NO_DATA_RELOCATION
 
-const QMetaObject *median_filter_ui::metaObject() const
+const QMetaObject *conservative_filter_ui::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->metaObject : &staticMetaObject;
 }
 
-void *median_filter_ui::qt_metacast(const char *_clname)
+void *conservative_filter_ui::qt_metacast(const char *_clname)
 {
     if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_median_filter_ui))
-        return static_cast<void*>(const_cast< median_filter_ui*>(this));
+    if (!strcmp(_clname, qt_meta_stringdata_conservative_filter_ui))
+        return static_cast<void*>(const_cast< conservative_filter_ui*>(this));
     return QDialog::qt_metacast(_clname);
 }
 
-int median_filter_ui::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int conservative_filter_ui::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QDialog::qt_metacall(_c, _id, _a);
     if (_id < 0)

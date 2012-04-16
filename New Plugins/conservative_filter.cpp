@@ -23,19 +23,20 @@
 #include "SpatialDataView.h"
 #include "SpatialDataWindow.h"
 #include "switchOnEncoding.h"
-#include "median_filter.h"
+#include "conservative_filter.h"
 #include <limits>
 
 #include <cmath>
 #include <vector>
 #include <algorithm>
-#include "median_filter_ui.h"
-REGISTER_PLUGIN_BASIC(PhotographyProcessingTools, median_filter);
+#include "conservative_filter_ui.h"
+
+REGISTER_PLUGIN_BASIC(PhotographyProcessingTools, conservative_filter);
 
 namespace
 {
    template<typename T>
-   void replaceByMedian(T* pData, DataAccessor pSrcAcc, int row, int col, int rowSize, int colSize, int radius)
+   void verifyRange(T* pData, DataAccessor pSrcAcc, int row, int col, int rowSize, int colSize, int radius)
    {
 	   int windowSize = (2*radius + 1);
 	   std::vector<int> neighborhood;
@@ -56,60 +57,63 @@ namespace
 		   }
 	   }
 
-	   std::sort(neighborhood.begin(), neighborhood.end());
-	   int medianIndex = neighborhood.size() / 2;
-	   *pData = static_cast<T>( neighborhood[medianIndex] );
+	   unsigned int min = *std::min_element(neighborhood.begin(), neighborhood.end());
+	   unsigned int max = *std::max_element(neighborhood.begin(), neighborhood.end());
+
+	   if(*pData < min)
+		   *pData = static_cast<T>(min);
+	   else if (*pData > max)
+		   *pData = static_cast<T>(max);
    }
 };
 
-median_filter::median_filter()
+conservative_filter::conservative_filter()
 {
-   setDescriptorId("{BE00BBC3-A1E3-4b0d-8780-1B5D9A8620CC}"); //set this later!!
-   setName("Median Filter");
+   setDescriptorId("{BE00BBC3-A1E3-4b0d-8780-1B5D9A8620CD}"); //set this later!!
+   setName("Conservative Filter");
    setVersion("1.0");
-   setDescription("Apply the median filter algorithm with a given radius to the raster data");
+   setDescription("Apply the conservative filter algorithm with a given radius to the raster data");
    setCreator("Vijesh");
    setCopyright("Copyright (C) 2012, Vijesh M <mv.vijesh@gmail.com>");
    setProductionStatus(true);
    setType("Algorithm");
-   setSubtype("Median Filter");
-   setMenuLocation("[Photography]/Median Filter");
+   setSubtype("Conservative Filter");
+   setMenuLocation("[Photography]/Conservative Filter");
    setAbortSupported(false);
 }
 
-median_filter::~median_filter()
+conservative_filter::~conservative_filter()
 {
 }
 
-bool median_filter::getInputSpecification(PlugInArgList*& pInArgList)
+bool conservative_filter::getInputSpecification(PlugInArgList*& pInArgList)
 {
    VERIFY(pInArgList = Service<PlugInManagerServices>()->getPlugInArgList());
    pInArgList->addArg<Progress>(Executable::ProgressArg(), NULL, "Progress reporter");
-   pInArgList->addArg<RasterElement>(Executable::DataElementArg(), "Apply median filter algorithm to the raster data");
+   pInArgList->addArg<RasterElement>(Executable::DataElementArg(), "Apply conservative filter algorithm to the raster data");
    return true;
 }
 
-bool median_filter::getOutputSpecification(PlugInArgList*& pOutArgList)
+bool conservative_filter::getOutputSpecification(PlugInArgList*& pOutArgList)
 {
    VERIFY(pOutArgList = Service<PlugInManagerServices>()->getPlugInArgList());
    pOutArgList->addArg<RasterElement>("Result", NULL);
    return true;
 }
 
-bool median_filter::execute(PlugInArgList* pInArgList, PlugInArgList* pOutArgList)
+bool conservative_filter::execute(PlugInArgList* pInArgList, PlugInArgList* pOutArgList)
 {
-   StepResource pStep("Median", "Filter", "5EA0CC75-9E0B-4c3d-BA23-6DB7157BBD54"); //what is this?
+   StepResource pStep("Conservative", "Filter", "5EA0CC75-9E0B-4c3d-BA23-6DB7157BBD55"); //what is this?
    if (pInArgList == NULL || pOutArgList == NULL)
    {
       return false;
    }
 
    Service <DesktopServices> pDesktop;
-   median_filter_ui dialog(pDesktop->getMainWidget());
+   conservative_filter_ui dialog(pDesktop->getMainWidget());
    int status = dialog.exec();
    if (status == QDialog::Accepted)
    {
-
 	   int radius = dialog.getRadiusValue();
 
    Progress* pProgress = pInArgList->getPlugInArgValue<Progress>(Executable::ProgressArg());
@@ -130,7 +134,7 @@ bool median_filter::execute(PlugInArgList* pInArgList, PlugInArgList* pOutArgLis
 
    if (pDesc->getDataType() == INT4SCOMPLEX || pDesc->getDataType() == FLT8COMPLEX)
    {
-      std::string msg = "Median Filter cannot be performed on complex types.";
+      std::string msg = "Conservative Filter cannot be performed on complex types.";
       pStep->finalize(Message::Failure, msg);
       if (pProgress != NULL) 
       {
@@ -143,7 +147,7 @@ bool median_filter::execute(PlugInArgList* pInArgList, PlugInArgList* pOutArgLis
    pRequest->setInterleaveFormat(BSQ);
    DataAccessor pSrcAcc = pCube->getDataAccessor(pRequest.release());
 
-   ModelResource<RasterElement> pResultCube(RasterUtilities::createRasterElement(pCube->getName() + "_Median_Filter_Result", pDesc->getRowCount(), pDesc->getColumnCount(), pDesc->getDataType()));
+   ModelResource<RasterElement> pResultCube(RasterUtilities::createRasterElement(pCube->getName() + "_Conservative_Filter_Result", pDesc->getRowCount(), pDesc->getColumnCount(), pDesc->getDataType()));
    if (pResultCube.get() == NULL)
    {
       std::string msg = "A raster cube could not be created.";
@@ -162,7 +166,7 @@ bool median_filter::execute(PlugInArgList* pInArgList, PlugInArgList* pOutArgLis
    {
       if (pProgress != NULL)
       {
-         pProgress->updateProgress("Applying Median Filter", row * 100 / pDesc->getRowCount(), NORMAL);
+         pProgress->updateProgress("Applying Conservative Filter", row * 100 / pDesc->getRowCount(), NORMAL);
       }
       if (isAborted())
       {
@@ -186,7 +190,7 @@ bool median_filter::execute(PlugInArgList* pInArgList, PlugInArgList* pOutArgLis
       }
       for (unsigned int col = 0; col < pDesc->getColumnCount(); ++col)
       {
-         switchOnEncoding(pDesc->getDataType(), replaceByMedian, pDestAcc->getColumn(), pSrcAcc, row, col, pDesc->getRowCount(), pDesc->getColumnCount(), radius);
+         switchOnEncoding(pDesc->getDataType(), verifyRange, pDestAcc->getColumn(), pSrcAcc, row, col, pDesc->getRowCount(), pDesc->getColumnCount(), radius);
          pDestAcc->nextColumn();
       }
       pDestAcc->nextRow();
@@ -217,10 +221,10 @@ bool median_filter::execute(PlugInArgList* pInArgList, PlugInArgList* pOutArgLis
 
    if (pProgress != NULL)
    {
-      pProgress->updateProgress("Median Filter is complete", 100, NORMAL);
+      pProgress->updateProgress("COnservative Filter is complete", 100, NORMAL);
    }
 
-   pOutArgList->setPlugInArgValue("median_filter_result", pResultCube.release());
+   pOutArgList->setPlugInArgValue("conservative_filter_result", pResultCube.release());
 
    pStep->finalize();
    }

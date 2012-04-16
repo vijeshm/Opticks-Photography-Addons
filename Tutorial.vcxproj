@@ -168,13 +168,16 @@
     <ClCompile Include="median_noise_ui.cpp" />
     <ClCompile Include="ModuleManager.cpp" />
     <ClCompile Include="neutralwhite.cpp" />
+    <ClCompile Include="New Plugins\conservative_filter.cpp" />
+    <ClCompile Include="New Plugins\conservative_filter_ui.cpp" />
+    <ClCompile Include="New Plugins\median_filter.cpp" />
+    <ClCompile Include="New Plugins\median_filter_ui.cpp" />
     <ClCompile Include="nlmean.cpp" />
     <ClCompile Include="nlmean_ui.cpp" />
+    <ClCompile Include="tmp\moc_conservative_filter_ui.cpp" />
     <ClCompile Include="tmp\moc_median_filter_ui.cpp" />
     <ClCompile Include="tmp\moc_median_noise_ui.cpp" />
     <ClCompile Include="tmp\moc_nlmean_ui.cpp" />
-    <ClCompile Include="vijesh\median_filter.cpp" />
-    <ClCompile Include="vijesh\median_filter_ui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="adaptive_median.h" />
@@ -183,10 +186,12 @@
     <ClInclude Include="median_noise.h" />
     <ClInclude Include="median_noise_ui.h" />
     <ClInclude Include="neutralwhite.h" />
+    <ClInclude Include="New Plugins\conservative_filter.h" />
+    <ClInclude Include="New Plugins\conservative_filter_ui.h" />
+    <ClInclude Include="New Plugins\median_filter.h" />
+    <ClInclude Include="New Plugins\median_filter_ui.h" />
     <ClInclude Include="nlmean.h" />
     <ClInclude Include="nlmean_ui.h" />
-    <ClInclude Include="vijesh\median_filter.h" />
-    <ClInclude Include="vijesh\median_filter_ui.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\PlugInLib\PlugInLib.vcxproj">
