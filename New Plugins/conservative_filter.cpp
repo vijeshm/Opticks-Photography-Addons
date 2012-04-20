@@ -49,19 +49,23 @@ namespace
 			   {
 				   if (j >= 0 && j <= colSize - 1)
 				   {
-					    pSrcAcc->toPixel(i, j);
-						VERIFYNRV(pSrcAcc.isValid());
-						neighborhood.push_back( *reinterpret_cast<T*>(pSrcAcc->getColumn()));
+						if (i != row && j != col)
+						{
+							pSrcAcc->toPixel(i, j);
+							VERIFYNRV(pSrcAcc.isValid());
+							neighborhood.push_back( *reinterpret_cast<T*>(pSrcAcc->getColumn()));
+						}
 				   }
 			   }
 		   }
 	   }
 
-	   unsigned int min = *std::min_element(neighborhood.begin(), neighborhood.end());
-	   unsigned int max = *std::max_element(neighborhood.begin(), neighborhood.end());
+	   int min = *std::min_element(neighborhood.begin(), neighborhood.end());
+	   int max = *std::max_element(neighborhood.begin(), neighborhood.end());
 
 	   if(*pData < min)
 		   *pData = static_cast<T>(min);
+
 	   else if (*pData > max)
 		   *pData = static_cast<T>(max);
    }
@@ -78,7 +82,7 @@ conservative_filter::conservative_filter()
    setProductionStatus(true);
    setType("Algorithm");
    setSubtype("Conservative Filter");
-   setMenuLocation("[Photography]/Conservative Filter");
+   setMenuLocation("[Photography]/[Hello There]/Conservative Filter");
    setAbortSupported(false);
 }
 

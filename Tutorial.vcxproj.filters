@@ -34,6 +34,15 @@
     <ClCompile Include="tmp\moc_conservative_filter_ui.cpp">
       <Filter>moc</Filter>
     </ClCompile>
+    <ClCompile Include="New Plugins\gamma_corr.cpp">
+      <Filter>vijesh</Filter>
+    </ClCompile>
+    <ClCompile Include="New Plugins\gamma_corr_ui.cpp">
+      <Filter>vijesh</Filter>
+    </ClCompile>
+    <ClCompile Include="tmp\moc_gamma_corr_ui.cpp">
+      <Filter>moc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="autowhite.h" />
@@ -54,6 +63,12 @@
       <Filter>vijesh</Filter>
     </ClInclude>
     <ClInclude Include="New Plugins\conservative_filter_ui.h">
+      <Filter>vijesh</Filter>
+    </ClInclude>
+    <ClInclude Include="New Plugins\gamma_corr.h">
+      <Filter>vijesh</Filter>
+    </ClInclude>
+    <ClInclude Include="New Plugins\gamma_corr_ui.h">
       <Filter>vijesh</Filter>
     </ClInclude>
   </ItemGroup>
