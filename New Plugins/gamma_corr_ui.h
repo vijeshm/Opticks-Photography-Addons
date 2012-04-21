@@ -1,33 +1,31 @@
-/* 
- * The information in this file is
- * Copyright (C) 2012, Vijesh M <mv.vijesh@gmail.com>
- * and is subject to the terms and conditions of the
- * GNU Lesser General Public License Version 2.1
- * The license text is available from   
- * http://www.gnu.org/licenses/lgpl.html
- */
+#ifndef GAMMA_CORR_UI_H
+#define GAMMA_CORR_UI_H
 
-#ifndef gamma_corr_ui_H
-#define gamma_corr_ui_H
+#include <QtGUi/QDialog>
 
-// #include "ExecutableShell.h"
-#include <QtGui/QDialog>
+namespace Ui {
+    class gamma_corr_ui;
+}
 
-class QDoubleSpinBox;
-
-class gamma_corr_ui:public QDialog
+class gamma_corr_ui : public QDialog
 {
-	Q_OBJECT public:
-	gamma_corr_ui(QWidget * pParent);
-	QDoubleSpinBox *GammaValueBox;
+    Q_OBJECT
 
+public:
+    explicit gamma_corr_ui(QWidget *parent = 0);
+    ~gamma_corr_ui();
 	double getGammaValue();
-	
-	private slots: 
-		void setGammaValue(double t = 0);
 
-	private:
-	  double GammaValue;
+private slots:
+    void on_gammaSlider_valueChanged(int value);
+
+    void on_ok_clicked();
+
+    void on_cancel_clicked();
+
+private:
+    Ui::gamma_corr_ui *ui;
+	double gammaValue;
 };
 
-#endif
+#endif // GAMMA_CORR_UI_H

@@ -195,6 +195,7 @@
     <ClInclude Include="New Plugins\gamma_corr_ui.h" />
     <ClInclude Include="New Plugins\median_filter.h" />
     <ClInclude Include="New Plugins\median_filter_ui.h" />
+    <ClInclude Include="New Plugins\ui_gamma_corr_ui.h" />
     <ClInclude Include="nlmean.h" />
     <ClInclude Include="nlmean_ui.h" />
   </ItemGroup>

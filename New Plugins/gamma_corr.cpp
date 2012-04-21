@@ -33,18 +33,35 @@
 
 REGISTER_PLUGIN_BASIC(PhotographyProcessingTools, gamma_corr);
 
-#define MAX_SIZE 15
-
 namespace
 {
 	template < typename T >
-	void correctGamma(T * pData, DataAccessor srcDataAcc, int curRow, int curCol, double gamma)
+	void correctGamma(T * pData, DataAccessor srcDataAcc, int curRow, int curCol, double gamma, Progress* pProgress)
 	{
 		srcDataAcc->toPixel(curRow, curCol);
 		VERIFYNRV(srcDataAcc.isValid());
-		int pixelValue = *reinterpret_cast<T*>(srcDataAcc->getColumn());
+		double pixelValue = *reinterpret_cast<T*>(srcDataAcc->getColumn());
+		/*
+		if (pProgress != NULL)
+		{
 
-		*pData = static_cast<T>( int(255 * pow(double(pixelValue) / 255, gamma)) );
+			if ( 255 * pow(pixelValue / 255.0, gamma) == pixelValue )
+				pProgress->updateProgress("matches", 0, ERRORS);
+			else
+				pProgress->updateProgress("mismatches", 0, ERRORS);
+			
+			
+			std::stringstream ss;
+			std::string s;
+			ss << 255 * pow(pixelValue / 255.0, gamma);
+			s = ss.str();
+
+			pProgress->updateProgress(s, 0, ERRORS);
+			
+		}
+		*/
+		//*pData = static_cast<T> (pixelValue);
+		*pData = static_cast<T>( 255 * pow(pixelValue / 255.0, 1.0/gamma) );
 	}
 };
 
@@ -71,7 +88,7 @@ bool analyzeChannel(RasterElement *pRaster, RasterElement *dRaster, int channel,
 	activeBand = rDesc->getActiveBand(channel);
 	FactoryResource < DataRequest > pResultRequest;
 	pResultRequest->setWritable(true);
-	pResultRequest->setInterleaveFormat(BSQ); //This was initially pRequest. Isnt that wrong?
+	pSourceRequest->setInterleaveFormat(BSQ); //This was initially pRequest. Isnt that wrong?
 	pResultRequest->setBands(activeBand, activeBand);
 	DataAccessor destDataAcc = dRaster->getDataAccessor(pResultRequest.release());
 
@@ -83,18 +100,18 @@ bool analyzeChannel(RasterElement *pRaster, RasterElement *dRaster, int channel,
 		for (unsigned int curCol = 0; curCol < pDesc->getColumnCount(); ++curCol)
 		{
 			VERIFY(destDataAcc.isValid());
-			switchOnEncoding(pDesc->getDataType(), correctGamma, destDataAcc->getColumn(), srcDataAcc, curRow, curCol, gamma);
+			switchOnEncoding(pDesc->getDataType(), correctGamma, destDataAcc->getColumn(), srcDataAcc, curRow, curCol, gamma, pProgress);
+			destDataAcc->nextColumn();
 		}
 		destDataAcc->nextRow();
 	}
-
 	return true;
 }
 
 
 gamma_corr::gamma_corr()
 {
-	setDescriptorId("{FF1EFA03-0888-4199-AB40-0503C9FABC80}");
+	setDescriptorId("{FF1EFA03-0888-4199-AB40-0503C9FABC81}");
 	setName("gamma_corr");
 	setDescription("Perform Gamma Correction on the raster data");
 	setCreator("Vijesh M");
@@ -173,7 +190,7 @@ bool gamma_corr::execute(PlugInArgList *pInArgList, PlugInArgList *pOutArgList)
 		pRequest->setInterleaveFormat(BSQ);
 		DataAccessor pSrcAcc = pCube->getDataAccessor(pRequest.release());
 	
-		RasterElement *dRas = RasterUtilities::createRasterElement(pCube->getName() + "Gamma_Correction_filter", pDesc->getRowCount(), pDesc->getColumnCount(), 3, pDesc->getDataType(), BSQ);
+		RasterElement *dRas = RasterUtilities::createRasterElement(pCube->getName() + " Gamma_Correction_filter", pDesc->getRowCount(), pDesc->getColumnCount(), 3, pDesc->getDataType(), BSQ);
 	
 		pProgress->updateProgress(msg, 50, NORMAL);
 	

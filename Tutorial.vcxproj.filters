@@ -71,6 +71,9 @@
     <ClInclude Include="New Plugins\gamma_corr_ui.h">
       <Filter>vijesh</Filter>
     </ClInclude>
+    <ClInclude Include="New Plugins\ui_gamma_corr_ui.h">
+      <Filter>vijesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="moc">

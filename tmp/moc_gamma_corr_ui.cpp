@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'gamma_corr_ui.h'
 **
-** Created: Fri 20. Apr 17:04:18 2012
+** Created: Fri Apr 20 22:28:43 2012
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_gamma_corr_ui[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -31,15 +31,17 @@ static const uint qt_meta_data_gamma_corr_ui[] = {
        0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
-      17,   15,   14,   14, 0x08,
-      39,   14,   14,   14, 0x28,
+      21,   15,   14,   14, 0x08,
+      54,   14,   14,   14, 0x08,
+      70,   14,   14,   14, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_gamma_corr_ui[] = {
-    "gamma_corr_ui\0\0t\0setGammaValue(double)\0"
-    "setGammaValue()\0"
+    "gamma_corr_ui\0\0value\0"
+    "on_gammaSlider_valueChanged(int)\0"
+    "on_ok_clicked()\0on_cancel_clicked()\0"
 };
 
 const QMetaObject gamma_corr_ui::staticMetaObject = {
@@ -71,11 +73,12 @@ int gamma_corr_ui::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: setGammaValue((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 1: setGammaValue(); break;
+        case 0: on_gammaSlider_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: on_ok_clicked(); break;
+        case 2: on_cancel_clicked(); break;
         default: ;
         }
-        _id -= 2;
+        _id -= 3;
     }
     return _id;
 }

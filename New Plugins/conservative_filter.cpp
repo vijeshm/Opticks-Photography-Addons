@@ -82,7 +82,7 @@ conservative_filter::conservative_filter()
    setProductionStatus(true);
    setType("Algorithm");
    setSubtype("Conservative Filter");
-   setMenuLocation("[Photography]/[Hello There]/Conservative Filter");
+   setMenuLocation("[Photography]/Conservative Filter");
    setAbortSupported(false);
 }
 
